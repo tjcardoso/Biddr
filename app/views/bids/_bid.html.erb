@@ -6,7 +6,7 @@
   <li>
 <p>$<%= bid.amount %></p>
 <p>Created by:  <%= bid.user ? bid.user.full_name : "" %></p>
-
+<p>Created on: <%= bid.created_at ? bid.created_at : "" %></p>
   <%#= link_to 'Destroy Bid', [bid.product, bid],
                method: :delete,
                data: { confirm: 'Are you sure?' },

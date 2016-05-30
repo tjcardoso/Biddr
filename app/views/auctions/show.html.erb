@@ -15,8 +15,17 @@
 </p>
 
 <p>
-  <strong>Reserve price:</strong>
-  $ <%= @auction.reserve_price %>
+  <% if @auction.bids.any? %>
+    <% if @auction.bids.first.amount != nil %>
+      <% if Bid.where(auction_id: @auction.id).map(&:amount).max >= @auction.reserve_price %>
+        <strong>Reserve Price met!</strong>
+      <% else %>
+        <strong>Reserve Price hasn't been met!</strong>
+      <% end %>
+    <% end %>
+   <% else %>
+     <strong>Reserve Price hasn't been met!</strong>
+  <% end %>
 </p>
 
 <%#= link_to 'Edit', edit_auction_path(@auction), class: "btn btn-default"%>
@@ -36,7 +45,7 @@
 <% end %>
 <% end %>
 <hr>
-<h3>Current Bids:</h3>
+<h4>Current Bids:</h4>
 <div id="bids">
   <% @auction.bids.each do |auc| %>
     <%= render "/bids/bid", bid: auc %>

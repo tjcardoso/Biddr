@@ -1,5 +1,5 @@
 class AuctionsController < ApplicationController
-  before_action :set_auction, only: [:show, :create, :new]
+  before_action :set_auction, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_user!, except: [:show, :index]
   # GET /auctions
   # GET /auctions.json

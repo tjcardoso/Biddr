@@ -1,0 +1,14 @@
+<h1>My Bids</h1>
+
+<% current_user.bids.each do |f| %>
+
+<p>
+  <%= f.auction.title %>
+</p>
+<p>
+  <%= f.amount %>
+
+</p>
+
+
+<% end %>

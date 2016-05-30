@@ -1,16 +1,7 @@
 class BidsController < ApplicationController
   # before_action :set_bid, only: [:show, :edit, :update]
   before_action :authenticate_user!
-  # before_action :authorize_user!
-  # before_action :find_auction
-  # GET /bids
-  # GET /bids.json
 
-  # before_action :find_auction
-  # before_action :find_and_authorize_bid, only: :destroy
-
-  # include QuestionsBidsHelper
-  # helper_method :user_like
 
   def create
     @auction      = Auction.find params[:auction_id]
@@ -48,64 +39,7 @@ class BidsController < ApplicationController
   def edit
     @bid = Bid.find params[:id]
   end
-  # def index
-  #   @bids = Bid.all
-  # end
-  #
-  # # GET /bids/1
-  # # GET /bids/1.json
-  # def show
-  # end
-  #
-  # # GET /bids/new
-  # def new
-  #   @auction = Auction.find params[:id]
-  #   @bid = Bid.new
-  # end
-  #
-  # # GET /bids/1/edit
-  # def edit
-  # end
-  #
-  # # POST /bids
-  # # POST /bids.json
-  # def create
-  #   @bid = Bid.new(bid_params)
-  #
-  #   respond_to do |format|
-  #     if @bid.save
-  #       format.html { redirect_to @bid, notice: 'Bid was successfully created.' }
-  #       format.json { render :show, status: :created, location: @bid }
-  #     else
-  #       format.html { render :new }
-  #       format.json { render json: @bid.errors, status: :unprocessable_entity }
-  #     end
-  #   end
-  # end
-  #
-  # # PATCH/PUT /bids/1
-  # # PATCH/PUT /bids/1.json
-  # def update
-  #   respond_to do |format|
-  #     if @bid.update(bid_params)
-  #       format.html { redirect_to @bid, notice: 'Bid was successfully updated.' }
-  #       format.json { render :show, status: :ok, location: @bid }
-  #     else
-  #       format.html { render :edit }
-  #       format.json { render json: @bid.errors, status: :unprocessable_entity }
-  #     end
-  #   end
-  # end
-  #
-  # # DELETE /bids/1
-  # # DELETE /bids/1.json
-  # def destroy
-  #   @bid.destroy
-  #   respond_to do |format|
-  #     format.html { redirect_to bids_url, notice: 'Bid was successfully destroyed.' }
-  #     format.json { head :no_content }
-  #   end
-  # end
+
   def authorize_user!
     @auction = Auction.find params[:auction_id]
 

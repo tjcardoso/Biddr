@@ -1,0 +1,20 @@
+
+
+<% if bid.persisted? %>
+<div id="<%= dom_id(bid) %>" style="<%= style if defined?(style)%>">
+<ul>
+  <li>
+<p>$<%= bid.amount %></p>
+<p>Created by:  <%= bid.user ? bid.user.full_name : "" %></p>
+
+  <%#= link_to 'Destroy Bid', [bid.product, bid],
+               method: :delete,
+               data: { confirm: 'Are you sure?' },
+               remote: true %>
+
+<br>
+
+</li>
+</ul>
+<% end %>
+</div>

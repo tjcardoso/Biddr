@@ -1,0 +1,44 @@
+
+
+<h1>
+<%= @auction.title %>
+</h1>
+
+<p>
+  <strong>Description:</strong><br><br>
+  <%= @auction.description %>
+</p>
+
+<p>
+  <strong>End date:</strong>
+  <%= @auction.end_date %>
+</p>
+
+<p>
+  <strong>Reserve price:</strong>
+  $ <%= @auction.reserve_price %>
+</p>
+
+<%= link_to 'Edit', edit_auction_path(@auction), class: "btn btn-default"%>
+<%= link_to 'Back', auctions_path, class: "btn btn-default" %>
+<br><br>
+<!-- <%= button_to 'Place a bid', new_auction_bid_path(@auction), method: :get, class: "btn btn-primary"%> -->
+
+<% if @auction.user != current_user %>
+<div id="bid-form">
+  <%= render "/bids/form", bid: @bid %>
+</div>
+<% end %>
+
+<% if @auction.bids.any? %>
+<% if @auction.bids.first.amount != nil %>
+<h3>Highest Bid: $ <%= Bid.where(auction_id: @auction.id).map(&:amount).max %></h3>
+<% end %>
+<% end %>
+<hr>
+<h3>Current Bids:</h3>
+<div id="bids">
+  <% @auction.bids.each do |auc| %>
+    <%= render "/bids/bid", bid: auc %>
+  <% end %>
+</div>

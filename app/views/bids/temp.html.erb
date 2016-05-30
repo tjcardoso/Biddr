@@ -1,0 +1,71 @@
+<%= form_for(@bid) do |f| %>
+  <% if @bid.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@bid.errors.count, "error") %> prohibited this bid from being saved:</h2>
+
+      <ul>
+      <% @bid.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :amount %><br>
+    <%= f.number_field :amount %>
+  </div>
+  <!-- <div class="field">
+    <%= f.label :user_id %><br>
+    <%= f.text_field :user_id %>
+  </div>
+  <div class="field">
+    <%= f.label :auction_id %><br>
+    <%= f.text_field :auction_id %>
+  </div> -->
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
+
+
+___________
+auctions show:
+
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Title:</strong>
+  <%= @auction.title %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @auction.description %>
+</p>
+
+<p>
+  <strong>End date:</strong>
+  <%= @auction.end_date %>
+</p>
+
+<p>
+  <strong>Reserve price:</strong>
+  $ <%= @auction.reserve_price %>
+</p>
+
+<%= link_to 'Edit', edit_auction_path(@auction), class: "btn btn-default"%>
+<%= link_to 'Back', auctions_path, class: "btn btn-default" %>
+<br><br>
+<!-- <%= button_to 'Place a bid', new_auction_bid_path(@auction), method: :get, class: "btn btn-primary"%> -->
+<div id="bid-form">
+  <%= render "/bids/form", bid: @bid %>
+</div>
+
+<hr>
+<h3>Current Bids:</h3>
+<div id="bids">
+  <% @auction.bids.each do |auc| %>
+    <%= render "/bids/bid", bid: auc %>
+  <% end %>
+</div>

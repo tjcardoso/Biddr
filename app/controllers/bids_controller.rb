@@ -9,13 +9,17 @@ class BidsController < ApplicationController
     @bid          = Bid.new bid_params
     @bid.auction  = @auction
     @bid.user     = current_user
-    # binding.pry
+    if @bid.amount < @auction.current_price
+      redirect_to auction_path(@auction), alert: "Your bid is lower than the current price"
+    end
+
     if current_user == @auction.user
       redirect_to auction_path(@auction), alert: "You can't bid on your own item"
     end
     respond_to do |format|
       if @bid.save
-        # BidsMailer.notify_auction_owner(@bid).deliver_later
+        @auction.current_price = @bid.amount
+        @auction.save
         format.html { redirect_to auction_path(@auction), notice: "Bid Received!" }
         format.js { render :create_success }
       else

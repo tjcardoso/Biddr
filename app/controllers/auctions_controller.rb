@@ -1,6 +1,10 @@
 class AuctionsController < ApplicationController
   before_action :set_auction, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_user!, except: [:show, :index]
+  prepend_before_action do
+    # binding.pry
+  end
+
   # GET /auctions
   # GET /auctions.json
   def index

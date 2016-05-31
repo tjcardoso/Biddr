@@ -2,97 +2,98 @@ require 'rails_helper'
 
 RSpec.describe AuctionsController, type: :controller do
 
-  let(:auction) { create(:auction) }
-  let(:auction_1) { create(:auction) }
 
-  describe "#index" do
-    it "assigns an auctions instance" do
-      get :index
-      expect(assigns(:auctions)).to eq([auction, auction_1])
+  let(:auction) { FactoryGirl.create(:auction) }
+  let(:user) { FactoryGirl.create(:user) }
+
+  describe "#new" do
+    before { sign_in user }
+    before { get :new    }
+
+    it "renders the new template" do
+      expect(response).to render_template(:new)
     end
-    it "renders the index template" do
-      get :index
-      expect(response).to render_template(:index)
+
+    it "assigns a auction object" do
+      expect(assigns(:auction)).to be_a_new(Auction)
     end
   end
 
   describe "#create" do
-    context "with valid request" do
+    describe "with valid attributes" do
       def valid_request
-        post :create, { auction: {
-            name: 'New auction',
-            details: 'These are the details',
-            end_date: DateTime.current + 3.days,
-            reserve_price: 50
-          } }
+        post :create, auction: FactoryGirl.attributes_for(:auction)
       end
-      it "creates a new auction record in the database" do
-        expect{ valid_request }.to change{ Auction.count }.by(1)
+
+      it "saves a record to the database" do
+        count_before = Auction.count
+        valid_request
+        count_after = Auction.count
+        expect(count_after).to eq(count_before + 1)
       end
-      it "redirects to the show page" do
+
+      it "redirects to the auction's show page" do
         valid_request
         expect(response).to redirect_to(auction_path(Auction.last))
       end
+
+      it "sets a flash message" do
+        valid_request
+        expect(flash[:notice]).to be
+      end
     end
-    context "with invalid request" do
+
+    describe "with invalid attributes" do
       def invalid_request
-          post :create, { auction: {
-            name: '',
-            details: 'These are the details',
-            end_date: DateTime.current + 3.days,
-            reserve_price: 50
-          } }
+        post :create, auction: {goal: 12}
       end
-      it "doesn't create a new auction record" do
-        expect{ invalid_request }.to change{ Auction.count }.by(0)
-      end
+
       it "renders the new template" do
         invalid_request
         expect(response).to render_template(:new)
       end
-      it "sets a flash alert message" do
+
+      it "sets an alert message" do
         invalid_request
         expect(flash[:alert]).to be
+      end
+
+      it "doesn't save a record to the database" do
+        count_before = Auction.count
+        invalid_request
+        count_after = Auction.count
+        expect(count_after).to eq(count_before)
       end
     end
   end
 
-  describe "#new" do
-    before {
-      get :new
-    }
-    it "assigns a new auction instance" do
-      expect(assigns(:auction)).to be_a_new(Auction)
-    end
-    it "renders the new template" do
-      expect(response).to render_template(:new)
-    end
-  end
-
-  describe "#edit" do
-    before {
-      get :edit, id: auction.id
-    }
-    it "assigns an auction instance as per the passed id" do
-      expect(assigns(:auction)).to eq(auction)
-    end
-    it "renders the edit template" do
-      expect(response).to render_template(:edit)
-    end
-  end
-
   describe "#show" do
-    before {
+    before do
       get :show, id: auction.id
-    }
-    it "assigns a auction instance as per the passed id" do
-      expect(assigns(:auction)).to eq(auction)
     end
+
     it "renders the show template" do
       expect(response).to render_template(:show)
     end
+
+    it "sets a auction instance variable" do
+      expect(assigns(:auction)).to eq(auction)
+    end
   end
 
+  describe "#index" do
+    it "renders the index template" do
+      get :index
+      expect(response).to render_template(:index)
+    end
+
+    it "assigns an instance variable to all auctions in the DB" do
+      c  = FactoryGirl.create(:auction)
+      c1 = FactoryGirl.create(:auction)
+      get :index
+      expect(assigns(:auctions)).to eq([c, c1])
+    end
+  end
 
 
 end
